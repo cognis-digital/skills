@@ -1,0 +1,87 @@
+{
+  "schema": "cognis-skills/registry@1",
+  "generated": "2026-06-08",
+  "owner": "Cognis Digital LLC",
+  "skills": {
+    "web-search": {
+      "name": "web-search",
+      "version": "1.0.0",
+      "description": "Keyless web/news search returning ranked result titles, urls, and snippets.",
+      "path": "skills/web-search",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["network"],
+      "tags": ["research", "osint", "web"]
+    },
+    "repo-audit": {
+      "name": "repo-audit",
+      "version": "1.0.0",
+      "description": "Static health audit of a code repository: size, language mix, large files, missing metadata.",
+      "path": "skills/repo-audit",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["filesystem", "read-only"],
+      "tags": ["code", "audit", "quality"]
+    },
+    "summarize": {
+      "name": "summarize",
+      "version": "1.0.0",
+      "description": "Extractive summarizer that condenses a text or Markdown file to its top sentences.",
+      "path": "skills/summarize",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["filesystem", "read-only"],
+      "tags": ["nlp", "summarize", "text"]
+    },
+    "sql-explain": {
+      "name": "sql-explain",
+      "version": "1.0.0",
+      "description": "Parse a SQL statement and explain in plain English what it does, with tables and columns touched.",
+      "path": "skills/sql-explain",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["read-only"],
+      "tags": ["sql", "database", "explain"]
+    },
+    "secret-scan": {
+      "name": "secret-scan",
+      "version": "1.0.0",
+      "description": "Scan files for leaked credentials using known-pattern regexes and Shannon-entropy heuristics.",
+      "path": "skills/secret-scan",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["filesystem", "read-only"],
+      "tags": ["security", "secrets", "audit"]
+    },
+    "changelog": {
+      "name": "changelog",
+      "version": "1.0.0",
+      "description": "Generate a categorized changelog section from git commit history since a ref or tag.",
+      "path": "skills/changelog",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["subprocess", "read-only"],
+      "tags": ["git", "release", "docs"]
+    },
+    "compliance-check": {
+      "name": "compliance-check",
+      "version": "1.0.0",
+      "description": "Verify a repository contains required policy, license, and security governance files.",
+      "path": "skills/compliance-check",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["filesystem", "read-only"],
+      "tags": ["compliance", "governance", "audit"]
+    },
+    "osint-lookup": {
+      "name": "osint-lookup",
+      "version": "1.0.0",
+      "description": "Resolve a domain or host to public footprint signals: DNS records, IPs, and reverse hints.",
+      "path": "skills/osint-lookup",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["network"],
+      "tags": ["osint", "recon", "network"]
+    }
+  }
+}
