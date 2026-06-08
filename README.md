@@ -95,6 +95,19 @@ Every skill MUST:
 | `compliance-check` | Check a repo for required policy/license/security files. |
 | `osint-lookup` | Resolve a domain/host to public footprint signals. |
 
+## How it fits
+
+```mermaid
+flowchart LR
+  U[You / CI / Agent] --> R[skills]
+  R --> O[Outputs & artifacts]
+  R --> M[MCP / JSON]
+  M --> AI[AI agents]
+  R --> S[Cognis Neural Suite]
+```
+
+**Explore the suite →** [🗂️ all tools](https://github.com/cognis-digital/cognis-neural-suite) · [⭐ awesome-cognis](https://github.com/cognis-digital/awesome-cognis) · [🔗 cognis-sources](https://github.com/cognis-digital/cognis-sources)
+
 ## License
 
 MIT. (c) 2026 Cognis Digital LLC.
