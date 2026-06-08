@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: skills, labels: { app: skills } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: skills } }
+  template:
+    metadata: { labels: { app: skills } }
+    spec:
+      containers:
+        - name: skills
+          image: ghcr.io/cognis-digital/skills:latest
+          ports: [{ containerPort: 8000 }]
+          resources:
+            requests: { cpu: "50m", memory: "64Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: skills }
+spec:
+  selector: { app: skills }
+  ports: [{ port: 80, targetPort: 8000 }]
