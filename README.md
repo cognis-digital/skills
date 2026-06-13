@@ -2,6 +2,12 @@
 
 An agent **skill registry** for Cognis Digital LLC autonomous agents (ATD trader, cog4 fleet, Mission Control). Skills are self-contained, model-agnostic capabilities an agent can discover, load, and invoke at runtime — in the spirit of ClawHub / Claude-skills manifests.
 
+<!-- cognis:layman:start -->
+## What is this?
+
+This is a library of ready-made mini-programs, called skills, that autonomous software agents can pick up and use on demand — things like searching the web, scanning code for leaked passwords, summarizing documents, or auditing a repository's health. Each skill is a small self-contained script that takes plain arguments and returns a structured result, so agents can chain them together without extra setup. A central registry file lets any program find and run the right skill by name without knowing where the files live. It is aimed at developers building AI agents or automation pipelines who want a reliable, no-dependency toolkit they can drop into any project.
+<!-- cognis:layman:end -->
+
 ## What a skill is
 
 A skill is a directory under `skills/` containing:
@@ -106,7 +112,35 @@ flowchart LR
   R --> S[Cognis Neural Suite]
 ```
 
-**Explore the suite →** [🗂️ all tools](https://github.com/cognis-digital/cognis-neural-suite) · [⭐ awesome-cognis](https://github.com/cognis-digital/awesome-cognis) · [🔗 cognis-sources](https://github.com/cognis-digital/cognis-sources)
+**Explore the suite →** [all tools](https://github.com/cognis-digital/cognis-neural-suite) · [awesome-cognis](https://github.com/cognis-digital/awesome-cognis) · [cognis-sources](https://github.com/cognis-digital/cognis-sources)
+
+## Getting started
+
+No installation is required. Clone the repo and run any skill directly with Python (3.9+):
+
+```sh
+git clone https://github.com/cognis-digital/skills.git
+cd skills
+```
+
+Run a skill by pointing Python at its entrypoint:
+
+```sh
+python3 skills/web-search/run.py --query "critical minerals export controls"
+python3 skills/secret-scan/run.py --path .
+python3 skills/repo-audit/run.py --path .
+python3 skills/summarize/run.py --file README.md
+```
+
+Or use the registry loader to resolve skills by name:
+
+```sh
+python3 skills/loader.py --list
+python3 skills/loader.py web-search --query "export controls"
+python3 skills/loader.py secret-scan --path .
+```
+
+All skills are stdlib-only — no `pip install` needed. Each one prints a JSON object to stdout and exits 0 on success.
 
 <a name="verification"></a>
 ## Verification
