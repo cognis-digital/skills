@@ -8,6 +8,16 @@ An agent **skill registry** for Cognis Digital LLC autonomous agents (ATD trader
 This is a library of ready-made mini-programs, called skills, that autonomous software agents can pick up and use on demand — things like searching the web, scanning code for leaked passwords, summarizing documents, or auditing a repository's health. Each skill is a small self-contained script that takes plain arguments and returns a structured result, so agents can chain them together without extra setup. A central registry file lets any program find and run the right skill by name without knowing where the files live. It is aimed at developers building AI agents or automation pipelines who want a reliable, no-dependency toolkit they can drop into any project.
 <!-- cognis:layman:end -->
 
+<!-- cognis:domains:start -->
+## Domains
+
+**Primary domain:** AI & ML  ·  **JTF MERIDIAN division:** ATHENA-PRIME · SAGE
+
+**Topics:** `cognis` `ai` `llm` `machine-learning` `mcp` `agent-security`
+
+Part of the **Cognis Neural Suite** — 300+ source-available tools organized across 12 domains under the JTF MERIDIAN command structure. See the [suite on GitHub](https://github.com/cognis-digital) and [jtf-meridian](https://github.com/cognis-digital/jtf-meridian) for how the pieces fit together.
+<!-- cognis:domains:end -->
+
 ## What a skill is
 
 A skill is a directory under `skills/` containing:
