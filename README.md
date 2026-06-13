@@ -1,6 +1,6 @@
 # cognis-skills
 
-An agent **skill registry** for Cognis Digital LLC autonomous agents (ATD trader, cog4 fleet, Mission Control). Skills are self-contained, model-agnostic capabilities an agent can discover, load, and invoke at runtime — in the spirit of ClawHub / Claude-skills manifests.
+An agent **skill registry** for Cognis Digital LLC autonomous agents (ATD trader, cog4 fleet, Mission Control). Skills are self-contained, model-agnostic capabilities an agent can discover, load, and invoke at runtime - in the spirit of ClawHub / Claude-skills manifests.
 
 ## What a skill is
 
@@ -39,14 +39,14 @@ tags: [research, osint]
 
 ### Frontmatter fields
 
-- **name** — unique, kebab-case. Matches the directory name and the `registry.json` key.
-- **version** — semver.
-- **description** — a *trigger sentence*. Written so a planner LLM can decide when to invoke without reading the body.
-- **entrypoint** — script filename, relative to the skill directory.
-- **runtime** — `python3`, `bash`, etc. Determines how the loader execs the entrypoint.
-- **args** — ordered list; each has `name`, `type`, `required`, `description`. Passed as `--name value` CLI flags.
-- **permissions** — capability tags the host must grant: `network`, `filesystem`, `read-only`, `subprocess`.
-- **tags** — free-form discovery labels.
+- **name** - unique, kebab-case. Matches the directory name and the `registry.json` key.
+- **version** - semver.
+- **description** - a *trigger sentence*. Written so a planner LLM can decide when to invoke without reading the body.
+- **entrypoint** - script filename, relative to the skill directory.
+- **runtime** - `python3`, `bash`, etc. Determines how the loader execs the entrypoint.
+- **args** - ordered list; each has `name`, `type`, `required`, `description`. Passed as `--name value` CLI flags.
+- **permissions** - capability tags the host must grant: `network`, `filesystem`, `read-only`, `subprocess`.
+- **tags** - free-form discovery labels.
 
 ## Invoking a skill
 
@@ -94,6 +94,7 @@ Every skill MUST:
 | `changelog` | Generate a changelog section from git history. |
 | `compliance-check` | Check a repo for required policy/license/security files. |
 | `osint-lookup` | Resolve a domain/host to public footprint signals. |
+| `x-twitter-scraper` | Build safe Xquik REST or MCP request plans for X/Twitter data workflows. |
 
 ## How it fits
 

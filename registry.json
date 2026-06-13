@@ -82,6 +82,16 @@
       "runtime": "python3",
       "permissions": ["network"],
       "tags": ["osint", "recon", "network"]
+    },
+    "x-twitter-scraper": {
+      "name": "x-twitter-scraper",
+      "version": "1.0.0",
+      "description": "Build safe Xquik REST or MCP request plans for X/Twitter data workflows.",
+      "path": "skills/x-twitter-scraper",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["read-only"],
+      "tags": ["x", "twitter", "osint", "api"]
     }
   }
 }
