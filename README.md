@@ -2,6 +2,36 @@
 
 An agent **skill registry** for Cognis Digital LLC autonomous agents (ATD trader, cog4 fleet, Mission Control). Skills are self-contained, model-agnostic capabilities an agent can discover, load, and invoke at runtime — in the spirit of ClawHub / Claude-skills manifests.
 
+## Usage — step by step
+
+1. **Get the registry** — clone the repo; skills are stdlib-only, so there is nothing to install:
+   ```bash
+   git clone https://github.com/cognis-digital/skills.git && cd skills
+   ```
+2. **Discover a skill** via `registry.json`, which maps every skill name to its directory and entrypoint:
+   ```bash
+   python -c "import json;print(*json.load(open('registry.json'))['skills'])"
+   ```
+3. **Invoke a skill** by execing its entrypoint with its declared `--name value` args (each skill prints a single JSON object to stdout):
+   ```bash
+   python3 skills/web-search/run.py --query "critical minerals export controls"
+   python3 skills/secret-scan/run.py --path ./src
+   ```
+4. **Use the output** — stdout is machine-readable JSON, diagnostics go to stderr, and the exit code is `0` on success:
+   ```bash
+   python3 skills/repo-audit/run.py --path . > audit.json
+   ```
+5. **Load skills programmatically** from an agent/CI step — resolve the entrypoint from the registry, run it, and parse stdout:
+   ```python
+   import json, subprocess, sys
+   from pathlib import Path
+   reg = json.loads(Path("registry.json").read_text())
+   s = reg["skills"]["secret-scan"]
+   out = subprocess.run([sys.executable, str(Path("skills")/s["name"]/s["entrypoint"]),
+                         "--path", "."], capture_output=True, text=True)
+   result = json.loads(out.stdout)
+   ```
+
 ## What a skill is
 
 A skill is a directory under `skills/` containing:
