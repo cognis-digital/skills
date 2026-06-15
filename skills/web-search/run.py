@@ -56,15 +56,18 @@ def gnews(query, limit):
     for m in re.finditer(r"<item>(.*?)</item>", body, re.S):
         block = m.group(1)
         t = re.search(r"<title>(.*?)</title>", block, re.S)
-        l = re.search(r"<link>(.*?)</link>", block, re.S)
+        lnk = re.search(r"<link>(.*?)</link>", block, re.S)
         d = re.search(r"<description>(.*?)</description>", block, re.S)
-        if not (t and l):
+        if not (t and lnk):
             continue
+        snippet_raw = d.group(1) if d else ""
         out.append(
             {
                 "title": html.unescape(re.sub("<.*?>", "", t.group(1))).strip(),
-                "url": l.group(1).strip(),
-                "snippet": html.unescape(re.sub("<.*?>", "", d.group(1) if d else "")).strip(),
+                "url": lnk.group(1).strip(),
+                "snippet": html.unescape(
+                    re.sub("<.*?>", "", snippet_raw)
+                ).strip(),
                 "source": "gnews",
             }
         )
@@ -79,6 +82,13 @@ def main():
     ap.add_argument("--max", type=int, default=8)
     a = ap.parse_args()
 
+    if not a.query.strip():
+        sys.stderr.write("error: --query must not be empty\n")
+        return 2
+    if a.max < 1:
+        sys.stderr.write("error: --max must be a positive integer\n")
+        return 2
+
     results, errors, seen = [], [], set()
     for backend in (ddg, gnews):
         if len(results) >= a.max:
@@ -92,7 +102,8 @@ def main():
         except Exception as e:  # noqa: BLE001
             errors.append({"backend": backend.__name__, "error": str(e)})
 
-    payload = {"query": a.query, "count": len(results[: a.max]), "results": results[: a.max]}
+    top = results[: a.max]
+    payload = {"query": a.query, "count": len(top), "results": top}
     if errors:
         payload["errors"] = errors
     print(json.dumps(payload, indent=2))

@@ -29,6 +29,10 @@ def main():
     ap.add_argument("--sentences", type=int, default=5)
     a = ap.parse_args()
 
+    if a.sentences < 1:
+        sys.stderr.write("error: --sentences must be a positive integer\n")
+        return 2
+
     p = Path(a.file)
     if not p.is_file():
         print(json.dumps({"error": f"file not found: {a.file}"}))

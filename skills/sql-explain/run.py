@@ -39,7 +39,9 @@ def main():
         res["columns"] = split_list(cols)
         frm = grab(r"FROM\s+(.*?)(?:\s+WHERE|\s+GROUP|\s+ORDER|\s+LIMIT|$)", sql)
         if frm:
-            res["tables"] = [t.split()[0] for t in re.split(r"\bJOIN\b", frm, flags=re.I)]
+            res["tables"] = [
+                t.split()[0] for t in re.split(r"\bJOIN\b", frm, flags=re.I)
+            ]
         joins = re.findall(r"JOIN\s+(\S+)", sql, re.I)
         if joins:
             res["joins"] = joins
@@ -62,7 +64,9 @@ def main():
 
     where = grab(r"WHERE\s+(.*?)(?:\s+GROUP|\s+ORDER|\s+LIMIT|$)", sql)
     if where:
-        res["filters"] = [c.strip() for c in re.split(r"\b(?:AND|OR)\b", where, flags=re.I)]
+        res["filters"] = [
+            c.strip() for c in re.split(r"\b(?:AND|OR)\b", where, flags=re.I)
+        ]
 
     verb = {
         "SELECT": "Reads",

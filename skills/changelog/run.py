@@ -5,6 +5,7 @@ import json
 import re
 import subprocess
 import sys
+from pathlib import Path
 
 CATEGORIES = [
     ("feat", "Features"),
@@ -36,9 +37,17 @@ def main():
     ap.add_argument("--version", default="Unreleased")
     a = ap.parse_args()
 
+    repo_path = Path(a.repo)
+    if not repo_path.exists():
+        print(json.dumps({"error": f"repo path does not exist: {a.repo}"}))
+        return 2
+
     check = git(["rev-parse", "--is-inside-work-tree"], a.repo)
     if check.returncode != 0:
-        print(json.dumps({"error": "not a git repository", "detail": check.stderr.strip()}))
+        print(json.dumps({
+            "error": "not a git repository",
+            "detail": check.stderr.strip(),
+        }))
         return 2
 
     since = a.since or last_tag(a.repo)

@@ -24,6 +24,15 @@ def main():
     ap.add_argument("--host", required=True)
     a = ap.parse_args()
     host = a.host.strip().lower()
+    if not host:
+        sys.stderr.write("error: --host must not be empty\n")
+        return 2
+    # Reject obviously non-hostname values (spaces, slashes)
+    if " " in host or "/" in host:
+        sys.stderr.write(
+            f"error: '{a.host}' does not look like a valid hostname or IP\n"
+        )
+        return 2
 
     records, errors = {}, []
     for rtype in RR_TYPES:

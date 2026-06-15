@@ -8,14 +8,19 @@ import sys
 from pathlib import Path
 
 SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "venv"}
-BINARY_EXT = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".zip", ".gz", ".exe", ".dll", ".so", ".bin"}
+BINARY_EXT = {
+    ".png", ".jpg", ".jpeg", ".gif", ".pdf", ".zip",
+    ".gz", ".exe", ".dll", ".so", ".bin",
+}
 
 PATTERNS = {
     "aws_access_key": re.compile(r"\b(AKIA[0-9A-Z]{16})\b"),
     "google_api_key": re.compile(r"\b(AIza[0-9A-Za-z\-_]{35})\b"),
     "slack_token": re.compile(r"\b(xox[baprs]-[0-9A-Za-z\-]{10,})\b"),
     "github_pat": re.compile(r"\b(gh[pousr]_[0-9A-Za-z]{36,})\b"),
-    "private_key": re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----"),
+    "private_key": re.compile(
+        r"-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----"
+    ),
     "generic_secret": re.compile(
         r"(?i)(?:password|passwd|secret|api[_-]?key|token)\s*[:=]\s*['\"]?([^\s'\"]{8,})"
     ),
@@ -51,14 +56,18 @@ def scan_file(p, entropy_min):
             m = rx.search(line)
             if m:
                 hit = m.group(1) if m.groups() else m.group(0)
-                findings.append({"file": str(p), "line": i, "rule": rule, "match": redact(hit)})
+                findings.append({
+                    "file": str(p), "line": i,
+                    "rule": rule, "match": redact(hit),
+                })
         for tok in HIGH_ENTROPY.findall(line):
             if shannon(tok) >= entropy_min and not any(
                 f["line"] == i for f in findings
             ):
-                findings.append(
-                    {"file": str(p), "line": i, "rule": "high_entropy", "match": redact(tok)}
-                )
+                findings.append({
+                    "file": str(p), "line": i,
+                    "rule": "high_entropy", "match": redact(tok),
+                })
     return findings
 
 
@@ -67,6 +76,13 @@ def main():
     ap.add_argument("--path", required=True)
     ap.add_argument("--entropy", type=float, default=4.0)
     a = ap.parse_args()
+
+    if a.entropy < 0 or a.entropy > 8:
+        sys.stderr.write(
+            "error: --entropy must be between 0 and 8 "
+            "(Shannon entropy of a random 64-char string is ~6)\n"
+        )
+        return 2
 
     root = Path(a.path)
     targets = []

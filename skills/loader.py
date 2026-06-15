@@ -24,24 +24,48 @@ REGISTRY = ROOT / "registry.json"
 
 
 def load_registry():
-    return json.loads(REGISTRY.read_text(encoding="utf-8"))
+    if not REGISTRY.is_file():
+        sys.stderr.write(f"registry not found: {REGISTRY}\n")
+        sys.exit(2)
+    try:
+        data = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        sys.stderr.write(f"registry.json is malformed: {exc}\n")
+        sys.exit(2)
+    if not isinstance(data, dict) or "skills" not in data:
+        sys.stderr.write("registry.json missing required 'skills' key\n")
+        sys.exit(2)
+    return data
 
 
 def list_skills():
     reg = load_registry()
-    for name, meta in reg["skills"].items():
-        print(f"{name:18s} {meta['description']}")
+    skills = reg.get("skills") or {}
+    if not skills:
+        sys.stderr.write("registry contains no skills\n")
+        return
+    for name, meta in skills.items():
+        if isinstance(meta, dict):
+            desc = meta.get("description", "(no description)")
+        else:
+            desc = ""
+        print(f"{name:18s} {desc}")
 
 
 def run(name, passthrough):
     reg = load_registry()
-    skills = reg["skills"]
+    skills = reg.get("skills", {})
     if name not in skills:
         sys.stderr.write(
             f"unknown skill '{name}'. Available: {', '.join(sorted(skills))}\n"
         )
         return 2
     meta = skills[name]
+    if not isinstance(meta, dict) or "path" not in meta or "entrypoint" not in meta:
+        sys.stderr.write(
+            f"registry entry for '{name}' is missing 'path' or 'entrypoint'\n"
+        )
+        return 2
     entry = ROOT / meta["path"] / meta["entrypoint"]
     if not entry.is_file():
         sys.stderr.write(f"entrypoint missing: {entry}\n")
