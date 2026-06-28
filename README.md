@@ -2,6 +2,31 @@
 
 An agent **skill registry** for Cognis Digital LLC autonomous agents (ATD trader, cog4 fleet, Mission Control). Skills are self-contained, model-agnostic capabilities an agent can discover, load, and invoke at runtime — in the spirit of ClawHub / Claude-skills manifests.
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+  "tools": [
+    {
+      "name": "hammer",
+      "skills": ["nailing", "screwing"],
+      "rating": 8
+    },
+    {
+      "name": "drill",
+      "skills": ["drilling", "screwing"],
+      "rating": 9
+    }
+  ]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 1. **Get the registry** — clone the repo; skills are stdlib-only, so there is nothing to install:
