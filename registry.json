@@ -82,6 +82,16 @@
       "runtime": "python3",
       "permissions": ["network"],
       "tags": ["osint", "recon", "network"]
+    },
+    "todo-scan": {
+      "name": "todo-scan",
+      "version": "1.0.0",
+      "description": "Scan a codebase for TODO/FIXME/HACK-style action markers and report file, line, and text.",
+      "path": "skills/todo-scan",
+      "entrypoint": "run.py",
+      "runtime": "python3",
+      "permissions": ["filesystem", "read-only"],
+      "tags": ["code", "quality", "audit", "debt"]
     }
   }
 }
