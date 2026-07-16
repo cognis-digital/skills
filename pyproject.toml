@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cognis-skills"
+version = "1.1.0"
+description = "Agent skill registry — portable, stdlib-only skills for AI agents, with a typed library and CLI."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Cognis Digital LLC", email = "dev@cognisdigital.com" }]
+keywords = ["agents", "skills", "registry", "osint", "security", "automation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff>=0.4"]
+
+[project.urls]
+Homepage = "https://github.com/cognis-digital/skills"
+Source = "https://github.com/cognis-digital/skills"
+
+[project.scripts]
+cognis-skills = "cognis_skills.cli:main"
+
+[tool.setuptools]
+packages = ["cognis_skills"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+# Skills are standalone scripts; a few pragmatic exceptions:
+#   E501 long lines in embedded regexes; BLE001 intentional broad network catches.
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"skills/*/run.py" = ["E402"]
+# Pre-existing scripts predate this lint config; ignore their stylistic nits
+# rather than alter working, shipped behavior.
+"skills/web-search/run.py" = ["E741"]
+"skills/repo-audit/run.py" = ["B007"]
+"livesearch.py" = ["I001"]
+"integrations/webhook.py" = ["I001", "E401", "F401"]

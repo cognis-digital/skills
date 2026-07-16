@@ -149,6 +149,95 @@ Every skill MUST:
 | `changelog` | Generate a changelog section from git history. |
 | `compliance-check` | Check a repo for required policy/license/security files. |
 | `osint-lookup` | Resolve a domain/host to public footprint signals. |
+| `todo-scan` | Inventory inline `TODO`/`FIXME`/`HACK` action markers across a tree. |
+
+## Library & CLI (`cognis-skills`)
+
+Beyond the zero-install scripts and the reference `loader.py`, the repo ships an
+optional, dependency-free Python library and console command that wrap the same
+registry contract. Install it from a checkout:
+
+```bash
+pip install -e .
+```
+
+Then use the CLI:
+
+```bash
+cognis-skills list                 # table of every registered skill
+cognis-skills list --json          # machine-readable
+cognis-skills run secret-scan --path .
+cognis-skills validate             # cross-check registry <-> files <-> manifests
+```
+
+Or the typed Python API:
+
+```python
+from cognis_skills import list_skills, run_skill, validate
+
+result = run_skill("secret-scan", ["--path", "."])
+print(result.ok, result.data["finding_count"])
+
+assert not [i for i in validate() if i.severity == "error"]
+```
+
+`cognis-skills validate` is the registry's integrity guard: it verifies that
+every entry in `registry.json` points at a real directory and entrypoint, that a
+`SKILL.md` exists whose frontmatter `name`/`version`/`entrypoint` match the
+registry, and that no skill directory has been added without registering it. It
+runs in CI and exits non-zero on any drift.
+
+See **[docs/USAGE.md](docs/USAGE.md)** for the full API and CLI reference.
+
+## Architecture
+
+Three thin layers over one contract — skills (the work), the registry (the
+index), and the access layer (`loader.py` + the `cognis_skills` library). A full
+diagram and the design rationale live in
+**[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+
+## Configuration reference
+
+Skills are configured entirely through their CLI flags — there are no config
+files or hidden environment inputs. The flags per skill:
+
+| Skill | Flags | Default | Notes |
+|-------|-------|---------|-------|
+| `web-search` | `--query`, `--max` | `--max 8` | keyless; needs network |
+| `repo-audit` | `--path`, `--large-mb` | `--large-mb 5.0` | read-only |
+| `summarize` | `--file`, `--sentences` | `--sentences 5` | extractive |
+| `sql-explain` | `--sql` (or stdin) | stdin | single statement |
+| `secret-scan` | `--path`, `--entropy` | `--entropy 4.0` | exits `1` on findings |
+| `changelog` | `--repo`, `--since`, `--version` | `--repo .`, last tag, `Unreleased` | needs git |
+| `compliance-check` | `--path`, `--policy` | built-in policy | `--policy` is a JSON file |
+| `osint-lookup` | `--host` | — | DoH + system resolver |
+| `todo-scan` | `--path`, `--markers` | `TODO,FIXME,HACK,XXX,BUG,OPTIMIZE,DEPRECATED` | exits `1` on findings |
+
+Environment:
+
+- **`PYTHONUTF8=1`** — recommended on Windows to force UTF-8 decoding of inputs.
+
+## FAQ
+
+**Do I need to install anything to run a skill?**
+No. Every skill is a standalone stdlib-only script: `python3 skills/<name>/run.py`.
+`pip install -e .` is only needed for the optional `cognis-skills` library/CLI.
+
+**What Python versions are supported?**
+3.9 through 3.13 (exercised in CI).
+
+**How do skills report success vs. failure?**
+Exit `0` on success, `2` on a usage/input error. Audit-style skills
+(`secret-scan`, `todo-scan`, `compliance-check`) also exit non-zero when they
+*find* something, so they can gate CI or a pre-commit hook.
+
+**Can I add my own skill?**
+Yes — create `skills/<name>/` with a `SKILL.md` manifest and an entrypoint,
+register it in `registry.json`, then run `cognis-skills validate` to confirm the
+wiring. See **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** for the contract.
+
+**Where is the roadmap?**
+**[ROADMAP.md](ROADMAP.md)**.
 
 ## How it fits
 
