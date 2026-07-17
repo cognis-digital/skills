@@ -112,3 +112,5 @@ flowchart LR
 ## License
 
 Cognis Open Collaboration License (COCL) v1.0. See [LICENSE](LICENSE).
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.

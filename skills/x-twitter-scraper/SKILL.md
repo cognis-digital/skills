@@ -77,3 +77,5 @@ python3 run.py --workflow mcp --target "find recent public posts about launch we
   monitors, or webhook delivery.
 - Confirm the requested collection complies with platform terms, privacy rules,
   and target workspace policy.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
