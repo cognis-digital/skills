@@ -111,4 +111,4 @@ flowchart LR
 
 ## License
 
-MIT. (c) 2026 Cognis Digital LLC.
+Cognis Open Collaboration License (COCL) v1.0. See [LICENSE](LICENSE).
